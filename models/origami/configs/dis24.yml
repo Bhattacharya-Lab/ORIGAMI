@@ -1,0 +1,42 @@
+model:
+  perceptron_mode: svp  # SVP works well with GAT # Specify to use GAT convolution
+  num_layers: 6
+  drop_rate: 0.15
+  node_hid_dims: 
+    - 128
+    - 32
+  edge_hid_dims:
+    - 64
+    - 16
+  # Interface-specific model parameters
+  node_in_dims: [33, 3]  # [scalar_dim, vector_dim]
+  num_rbf: 16
+  num_positional_embeddings: 16
+  top_k: 40  # Number of neighbors for attention
+  num_heads: 4  # Number of attention heads for GAT
+
+train:
+  seed: 42
+  max_epochs: 200  # Middle ground between svp and gvp
+  val_freq: 1  # Validate every 2 epochs
+  max_grad_norm: 5.0  # Conservative gradient clipping
+  optimizer:
+    type: adam
+    lr: 1.e-5  # Middle ground between svp and gvp
+    weight_decay: 0.0  # Added small weight decay for regularization
+    beta1: 0.9
+    beta2: 0.999
+  scheduler: 
+    type: exp
+    gamma: 0.99
+
+data:
+  root: /home/grads/xinyu0110/OAGNN_dataset2
+  train_pdb_dir: pdb_train
+  train_ilddt_dir: ilddt_train
+  val_pdb_dir: pdb_val
+  val_ilddt_dir: ilddt_val
+  test_pdb_dir: pdb_casp15
+  test_ilddt_dir: ilddt_casp15
+  train_batch_size: 8  # Must be even (for pairs)
+  val_batch_size: 8 

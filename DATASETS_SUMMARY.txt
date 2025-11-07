@@ -1,0 +1,91 @@
+╔════════════════════════════════════════════════════════════════╗
+║              ORIGAMI Datasets - Complete Summary               ║
+╚════════════════════════════════════════════════════════════════╝
+
+📦 DATASET 1: CASP16 In-House (Curated)
+   Location: origami_datasets/casp16_inhouse/
+   Files: 2,568 PDB files
+   Size: 689 MB
+   Source: OAGNN_dataset2/pdb_casp16
+   Selection: Based on ORIGAMI paper predictions
+   Purpose: Curated evaluation set from paper
+   
+📦 DATASET 2: CASP16 5QA Final (Complete)
+   Location: origami_datasets/casp16_QA/
+   Files: 3,000 PDB files
+   Size: 1.3 GB
+   Source: OAGNN_dataset2/pdb_casp16_5QA_final
+   Selection: Complete 5QA test set
+   Purpose: Official CASP16 quality assessment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 COMBINED STATISTICS
+
+Total Datasets: 2
+Total PDB Files: 5,568
+Total Size: ~2.0 GB
+
+Breakdown:
+  • casp16_inhouse: 2,568 files (46%)
+  • casp16_QA:      3,000 files (54%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 USAGE EXAMPLES
+
+1. Extract features from In-House dataset:
+   python data_preprocess.py \
+       -i origami_datasets/casp16_inhouse \
+       -o features/casp16_inhouse
+
+2. Extract features from 5QA dataset:
+   python data_preprocess.py \
+       -i origami_datasets/casp16_QA \
+       -o features/casp16_QA
+
+3. Test pretrained model on In-House:
+   python models/psr/train_ddp_0719.py \
+       pretrained_models/dis24.yml \
+       --test \
+       --resume pretrained_models/checkpoints/best.pt \
+       --test_dataset casp16_inhouse
+
+4. Test pretrained model on 5QA:
+   python models/psr/train_ddp_0719.py \
+       pretrained_models/dis24.yml \
+       --test \
+       --resume pretrained_models/checkpoints/best.pt \
+       --test_dataset casp16_5qa
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 DIRECTORY STRUCTURE
+
+ORIGAMI/
+├── origami_datasets/
+│   ├── casp16_inhouse/          (2,568 files, 689 MB)
+│   │   ├── README.md
+│   │   └── *.pdb
+│   └── casp16_QA/               (3,000 files, 1.3 GB)
+│       ├── README.md
+│       └── *.pdb
+├── pretrained_models/
+│   └── checkpoints/
+│       └── best.pt              (52 MB)
+└── features/                    (created after preprocessing)
+    ├── casp16_inhouse/
+    └── casp16_QA/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION
+
+• casp16_inhouse/README.md - In-House dataset documentation
+• casp16_QA/README.md      - 5QA dataset documentation
+• DATASETS_SUMMARY.txt     - This file
+• README.md                - Main project documentation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ All datasets are ready for use!

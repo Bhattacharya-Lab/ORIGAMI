@@ -1,0 +1,53 @@
+╔════════════════════════════════════════════════════════════════╗
+║              Pretrained Model Successfully Added               ║
+╚════════════════════════════════════════════════════════════════╝
+
+📦 MODEL DETAILS
+  File: pretrained_models/checkpoints/110.pt
+  Link: pretrained_models/checkpoints/best.pt -> 110.pt
+  Size: 52 MB
+  Epoch: 110
+  Training Date: September 25, 2025
+  
+📄 CONFIGURATION
+  File: pretrained_models/dis24.yml
+  Source: 0925_replicate_0719_log/dis24_2025_09_25__12_59_40_replicate_0719_training
+  
+📚 DOCUMENTATION
+  See: pretrained_models/README.md
+
+🚀 QUICK START
+
+  1. Test with pretrained model:
+     python models/psr/train_ddp_0719.py \
+         pretrained_models/dis24.yml \
+         --test \
+         --resume pretrained_models/checkpoints/best.pt
+
+  2. Resume training:
+     python models/psr/train_ddp_0719.py \
+         pretrained_models/dis24.yml \
+         --resume pretrained_models/checkpoints/best.pt
+
+  3. Fine-tune on your data:
+     python models/psr/train_ddp_0719.py \
+         your_config.yml \
+         --resume pretrained_models/checkpoints/best.pt
+
+💡 USAGE TIPS
+
+  - Use best.pt for convenience (it's a symlink to 110.pt)
+  - See pretrained_models/README.md for detailed examples
+  - The model expects features from data_preprocess.py
+  - Configuration in dis24.yml shows training settings
+
+📁 DIRECTORY STRUCTURE
+
+  ORIGAMI/
+  └── pretrained_models/
+      ├── checkpoints/
+      │   ├── 110.pt        (52 MB)
+      │   └── best.pt       (symlink)
+      ├── dis24.yml         (config)
+      └── README.md         (docs)
+

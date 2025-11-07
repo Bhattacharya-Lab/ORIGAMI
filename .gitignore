@@ -1,0 +1,36 @@
+__pycache__/
+*.py[cod]
+*.so
+*.dylib
+
+# Virtual environments
+.env
+.venv/
+venv/
+env/
+
+# Python packaging/artifacts
+build/
+dist/
+*.egg-info/
+
+# IDE/editor
+.idea/
+.vscode/
+*.swp
+
+# Logs and checkpoints
+logs/
+*.log
+pretrained_models/checkpoints/
+
+# Generated data artifacts
+origami_datasets/
+*.pt
+*.npy
+*.npz
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
