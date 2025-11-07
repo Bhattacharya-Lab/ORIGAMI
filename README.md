@@ -1,282 +1,257 @@
-# ORIGAMI - Protein Structure Quality Assessment
+# ORIGAMI: Protein Interface Quality Assessment
 
-A deep learning framework for protein structure quality assessment combining secondary structure, SASA, and graph neural networks.
+> Graph neural network framework for ranking protein complex decoys with secondary-structure and solvent-exposure features.
 
-## Project Structure
+## Table of Contents
+- [Overview](#overview)
+- [Highlights](#highlights)
+- [Installation](#installation)
+- [Command-Line Workflow](#command-line-workflow)
+- [Pretrained Models](#pretrained-models)
+- [Training](#training)
+- [Dataset Preparation](#dataset-preparation)
+- [Testing & QA](#testing--qa)
+- [Project Structure](#project-structure)
+- [Troubleshooting](#troubleshooting)
+- [Citation](#citation)
+- [License](#license)
+- [Contact](#contact)
 
-```
-ORIGAMI/
-├── data_preprocess.py           # PDB feature extraction (SS, SASA, coords)
-├── origami_environment.yml      # Conda environment configuration
-├── pretrained_models/           # Pretrained model checkpoints
-│   ├── checkpoints/
-│   │   ├── 110.pt              # Epoch 110 checkpoint
-│   │   └── best.pt             # Symlink to best model
-│   ├── dis24.yml               # Training configuration
-│   └── README.md               # Pretrained model documentation
-├── models/
-│   └── psr/
-│       ├── train_ddp_0719.py   # Main training script (DDP)
-│       ├── datasets_24.py       # Dataset loader
-│       ├── models.py            # PSR Network model
-│       ├── utils.py             # PSR utilities
-│       └── configs/             # Training configurations
-├── modules/                     # Neural network modules
-│   ├── gconv.py                # Graph convolution layers
-│   ├── perceptron.py           # Vector perceptron
-│   ├── geometric.py            # Geometric operations
-│   └── ...
-└── utils/                       # Utility functions
-    ├── misc.py                 # General utilities
-    └── train.py                # Training utilities
-```
+## Overview
+ORIGAMI scores protein complex models by combining residue-level features (DSSP secondary structure, PyRosetta SASA, geometric descriptors) with a scalar-vector GNN architecture. The framework supports large-scale preprocessing, distributed training, and evaluation on curated CASP15/16 benchmark sets.
+
+## Highlights
+- **Rich features**: Secondary structure, per-residue SASA, dihedrals, and chain-aware embeddings.
+- **Interface-aware GNN**: Scalar/vector representations with attention over residue interactions.
+- **Pretrained checkpoints**: Ready for plug-and-play evaluation or fine-tuning.
+- **Extensible pipeline**: CLI for feature extraction, modular training configs, and dataset caching.
 
 ## Installation
 
-### 1. Create Conda Environment
+### With Anaconda
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/<your-user>/ORIGAMI.git
+   cd ORIGAMI
+   ```
+   Replace `<your-user>` with the GitHub organisation or username that will host ORIGAMI.
 
+2. **Create and activate the environment**
+   ```bash
+   conda env create -f origami_environment.yml
+   conda activate origami
+   ```
+   The YAML ships with CUDA-enabled builds; feel free to slim it down for CPU-only deployments.
+
+3. **Install PyRosetta (optional, for SASA)**
+   ```bash
+   pip install pyrosetta-2024
+   ```
+   PyRosetta requires an academic licence. See the troubleshooting section for alternatives if it is unavailable.
+
+4. **Install the command-line tool**
+   ```bash
+   pip install -e .
+   ```
+   Editable mode exposes the `origami-preprocess` entry point and keeps local edits live.
+
+5. **Verify the environment**
+   ```bash
+   pytest tests/
+   ```
+   Smoke tests assert core modules import correctly. PyRosetta-dependent checks skip automatically when the package is missing.
+
+## Command-Line Workflow
+
+### Feature extraction
 ```bash
-conda env create -f origami_environment.yml
-conda activate origami
+# Single PDB
+origami-preprocess -i protein.pdb -o features/protein
+
+# Directory of PDBs
+origami-preprocess -i path/to/pdb_dir -o features/corpus
 ```
+Each `.pt` file contains the residue sequence, backbone coordinates, DSSP string + one-hot encoding, and relative SASA values.
 
-### 2. Install PyRosetta (Optional)
-
-PyRosetta is required for SASA calculation. It requires an academic license:
-
+### Inference helper
 ```bash
-pip install pyrosetta-2024
+python data_preprocess.py -i protein.pdb -o features/protein --verbose
 ```
-
-Or visit: https://www.pyrosetta.org/
-
-## Data Preprocessing
-
-Extract features from PDB files:
-
-```bash
-# Process a single PDB file
-python data_preprocess.py -i protein.pdb -o output_dir
-
-# Process a directory of PDB files
-python data_preprocess.py -i pdb_folder -o features_folder
-```
-
-### Output Format
-
-Each PDB generates a `.pt` file containing:
-- **Secondary Structure**: DSSP-predicted (H/E/C) + one-hot encoding
-- **Relative SASA**: Per-residue solvent accessibility
-- **Coordinates**: N, CA, C, O backbone atoms (shape: L×4×3)
-- **Sequence**: Amino acid sequence and chain information
-
-## Training
-
-### Basic Training
-
-```bash
-python models/psr/train_ddp_0719.py models/psr/configs/0908/your_config.yml
-```
-
-### Distributed Training (Multi-GPU)
-
-```bash
-torchrun --nproc_per_node=4 models/psr/train_ddp_0719.py models/psr/configs/0908/your_config.yml
-```
-
-### Training Options
-
-```bash
-python models/psr/train_ddp_0719.py CONFIG_FILE [OPTIONS]
-
-Options:
-  --logdir DIR          Log directory
-  --tag TAG             Experiment tag
-  --device DEVICE       Device (cuda/cpu)
-  --resume PATH         Resume from checkpoint
-  --test                Run testing only
-  --test_dataset NAME   Test dataset: all/test1/test2/test3/casp16_5qa
-  --overwrite           Overwrite existing logs
-  --debug               Debug mode
-```
-
-## Configuration
-
-Training configurations are in `models/psr/configs/`. Example structure:
-
-```yaml
-data:
-  base_dir: /path/to/data
-  train_pdb_dir: pdb_train
-  train_ilddt_dir: ilddt_train
-  ss_file: secondary_structure/SS_train.result
-  rsa_dir: rsasa_train
-  
-model:
-  num_layers: 6
-  node_dim_scalar: 256
-  node_dim_vector: 64
-  edge_dim: 32
-  
-train:
-  batch_size: 4
-  num_epochs: 100
-  learning_rate: 5.0e-4
-  weight_decay: 0.0
-  seed: 2020
-```
-
-## Features
-
-### Data Processing
-- ✅ DSSP secondary structure calculation
-- ✅ PyRosetta SASA computation
-- ✅ Multi-chain support
-- ✅ Interface residue detection
-- ✅ Automatic feature caching
-
-### Model Architecture
-- ✅ Graph Neural Network (GNN) based
-- ✅ Scalar-Vector features
-- ✅ Edge features (RBF + positional embeddings)
-- ✅ Chain-aware processing
-- ✅ Interface-focused prediction
-
-### Training
-- ✅ Distributed Data Parallel (DDP)
-- ✅ Mixed precision training
-- ✅ Gradient clipping
-- ✅ TensorBoard logging
-- ✅ Checkpoint management
-- ✅ Multiple test datasets
-
-## Dependencies
-
-### Core Requirements
-- Python 3.8
-- PyTorch 1.10.0 + CUDA 11.1
-- PyTorch Geometric
-- BioPython
-- pydssp
-
-### Optional
-- PyRosetta (for SASA calculation)
-- FreeSASA (alternative to PyRosetta)
-
-See `origami_environment.yml` for complete dependency list.
+Running the script directly prints progress, writes features to `<output>/<pdb_name>_features.pt`, and reports residue counts per chain.
 
 ## Pretrained Models
 
-A pretrained model (epoch 110) is available in `pretrained_models/`:
-
-### Quick Start with Pretrained Model
-
+### Quick evaluation
 ```bash
-# Test on your dataset
 python models/psr/train_ddp_0719.py \
     pretrained_models/dis24.yml \
     --test \
-    --resume pretrained_models/checkpoints/best.pt \
-    --test_dataset your_dataset
+    --test_dataset test1 \
+    --resume pretrained_models/checkpoints/best.pt
 ```
+- `--test_dataset` accepts `all`, `test1`, `test2`, `test3`, `casp16_5qa` or any custom split defined in the config.
+- Metrics (Spearman, Kendall, Pearson, AUC, MAE) stream to stdout and TensorBoard.
 
-See `pretrained_models/README.md` for detailed usage instructions.
+### Evaluate on a custom dataset
+1. **Organise decoys**
+   - Place PDBs under `data/my_dataset/pdb_custom/`.
+   - Filenames should be unique per target (e.g. `T0001TS001_1.pdb`).
 
-## Usage Examples
+2. **Provide ground-truth JSON**
+   - For each decoy create `data/my_dataset/ilddt_custom/<decoy>.json` with keys `target`, `decoy`, `ilddt`.
+   - Stub values are acceptable if you only require predictions.
 
-### Example 1: Feature Extraction
+3. **Generate DSSP + SASA inputs**
+   ```bash
+   origami-preprocess -i data/my_dataset/pdb_custom -o features/my_dataset
+   ```
+   - Collect DSSP strings into `secondary_structure/SS_custom.result` with `"<SS> <relative/path/to/pdb>"` per line.
+   - Convert per-residue SASA to `rsasa_custom/<decoy>.txt` (one float per residue).
 
-```python
-import torch
-from data_preprocess import extract_all_features
-import pyrosetta
+4. **Match expected layout**
+   ```
+   data/my_dataset/
+   ├── pdb_custom/
+   ├── ilddt_custom/
+   ├── rsasa_custom/
+   └── secondary_structure/
+       └── SS_custom.result
+   ```
 
-pyrosetta.init("-mute all")
+5. **Configure evaluation**
+   - Copy `pretrained_models/dis24.yml` to `configs/my_custom_eval.yml`.
+   - Update `data.root` and the `test1_*` paths to point at your folders.
 
-# Extract features from a single PDB
-features = extract_all_features("protein.pdb")
+6. **Run scoring**
+   ```bash
+   python models/psr/train_ddp_0719.py \
+       configs/my_custom_eval.yml \
+       --test \
+       --test_dataset test1 \
+       --resume pretrained_models/checkpoints/best.pt \
+       --logdir runs/my_dataset_eval
+   ```
+   - Predictions land in `runs/my_dataset_eval/test1_predictions.csv`.
+   - Add `--device cpu` when GPUs are unavailable (expect slower runs).
 
-# Access features
-print(f"Residues: {features['total_residues']}")
-print(f"Secondary structure: {features['secondary_structure']}")
-print(f"Coordinates shape: {features['chains'][0]['coords'].shape}")
+7. **Interpret outputs**
+   - Sort by `pred` to rank decoys per target.
+   - TensorBoard (if enabled) stores correlation curves and loss metrics.
 
-# Save features
-torch.save(features, "protein_features.pt")
-```
+For more background, see `pretrained_models/README.md`.
 
-### Example 2: Training
+## Training
 
+### Single-GPU run
 ```bash
-# Train on single GPU
-python models/psr/train_ddp_0719.py models/psr/configs/0908/config.yml
-
-# Train on 4 GPUs
-torchrun --nproc_per_node=4 models/psr/train_ddp_0719.py models/psr/configs/0908/config.yml
-
-# Resume training
-python models/psr/train_ddp_0719.py models/psr/configs/0908/config.yml --resume logs/checkpoint.pt
+python models/psr/train_ddp_0719.py configs/dis24.yml --logdir runs/dis24_baseline
 ```
 
-### Example 3: Testing
-
+### Distributed (multi-GPU)
 ```bash
-# Test on all datasets
-python models/psr/train_ddp_0719.py models/psr/configs/0908/config.yml --test --resume best_model.pt
-
-# Test on specific dataset
-python models/psr/train_ddp_0719.py models/psr/configs/0908/config.yml --test --test_dataset casp16_5qa --resume best_model.pt
+torchrun --nproc_per_node=4 models/psr/train_ddp_0719.py \
+    configs/dis24.yml --logdir runs/dis24_ddp
 ```
 
-## Metrics
+### Useful flags
+```
+--resume PATH          Resume from checkpoint (.pt)
+--overwrite            Reuse logdir when resuming
+--test                 Skip training, run evaluation only
+--tag STRING           Append experiment tag to logdir
+--device cpu           Force CPU execution
+```
 
-The model reports:
-- **Spearman Correlation**: Rank correlation with ground truth
-- **Kendall's Tau**: Alternative rank correlation
-- **Pearson Correlation**: Linear correlation
-- **AUC**: Area under ROC curve
-- **Loss**: Training/validation loss
+Configuration examples live under `models/psr/configs/`. A minimal template:
+```yaml
+data:
+  root: /path/to/dataset
+  train_pdb_dir: pdb_train
+  train_ilddt_dir: ilddt_train
+  val_pdb_dir: pdb_val
+  val_ilddt_dir: ilddt_val
+  train_batch_size: 8
+  val_batch_size: 8
+
+model:
+  num_layers: 6
+  node_hid_dims: [128, 32]
+  edge_hid_dims: [64, 16]
+
+train:
+  seed: 42
+  max_epochs: 200
+  optimizer:
+    type: adam
+    lr: 1.0e-5
+```
+
+## Dataset Preparation
+
+1. **Raw structures**: PDB files per decoy with continuous residue numbering per chain.
+2. **Labels**: JSON files containing interface lDDT or your target metric.
+3. **Secondary structure**: Aggregate DSSP output in `secondary_structure/SS_<split>.result` (one entry per decoy).
+4. **SASA text files**: Relative SASA per residue stored as `<decoy>.txt`.
+5. **Cache**: Processed datasets are cached under `/home/grads/xinyu0110/OAGNN_dataset2/data_24` by default; override via the dataset constructor if needed.
+
+Refer to the curated CASP datasets in `origami_datasets/` for full examples.
+
+## Testing & QA
+- `pytest tests/` – smoke tests for importability (PyRosetta skipped automatically).
+- `python -m torch.distributed.run --nproc_per_node=2 ... --test` – quickly validate distributed inference.
+- `tensorboard --logdir runs` – inspect training curves and per-target correlations.
+
+## Project Structure
+```
+ORIGAMI/
+├── data_preprocess.py           # Feature extraction CLI/utility
+├── origami_environment.yml      # Conda environment definition
+├── pretrained_models/           # Checkpoints + evaluation configs
+├── models/                      # Training scripts, datasets, utilities
+├── modules/                     # Neural network building blocks
+├── utils/                       # Shared helpers (logging, schedulers)
+└── tests/                       # Smoke tests
+```
 
 ## Troubleshooting
-
-### PyRosetta Installation
-
-If PyRosetta is not available, you can:
-1. Use FreeSASA as an alternative: `pip install freesasa`
-2. Skip SASA features (modify `data_preprocess.py`)
-3. Use pre-computed SASA values
-
-### CUDA Out of Memory
-
-- Reduce `batch_size` in config
-- Use gradient accumulation
-- Enable mixed precision training
-- Reduce model size (`num_layers`, `node_dim_scalar`)
-
-### Data Loading Issues
-
-Ensure your data directory structure matches:
-```
-data/
-├── pdb_train/          # Training PDB files
-├── ilddt_train/        # ILDDT JSON files
-├── rsasa_train/        # SASA text files
-└── secondary_structure/
-    └── SS_train.result # Secondary structure file
-```
+- **PyRosetta unavailable**: Install FreeSASA (`pip install freesasa`) and adjust the preprocessing script to skip PyRosetta-dependent features.
+- **CUDA OOM**: Lower `train_batch_size`, reduce the number of layers, or enable mixed precision (`torch.cuda.amp`).
+- **Slow preprocessing**: Use the cached dataset files produced in `/data_24` or lower `preproc_n_jobs` when compute resources are limited.
+- **Missing DSSP entries**: Ensure the DSSP result file contains an entry per decoy with matching basename.
 
 ## Citation
-
-If you use this code, please cite:
+If you use ORIGAMI in your research, please cite:
 ```
-[Add citation here]
+
 ```
 
 ## License
+```
+MIT License
 
-[Add license information]
+Copyright (c) 2025 ORIGAMI Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ## Contact
+For questions or collaboration requests, reach out to the maintainers:
+- Xinyu Wang — Virginia Tech — `xinyu0110@vt.edu`
 
-[Add contact information]
 

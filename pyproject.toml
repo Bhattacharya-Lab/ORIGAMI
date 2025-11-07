@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "origami-psr"
+version = "0.1.0"
+description = "Protein structure quality assessment pipeline built on graph neural networks."
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+  { name = "ORIGAMI contributors" }
+]
+keywords = ["protein", "structure", "quality assessment", "gnn"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+origami-preprocess = "data_preprocess:main"
+
+[tool.setuptools.packages.find]
+include = ["models*", "modules*", "utils*"]
+
+[tool.setuptools]
+py-modules = ["data_preprocess"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"models.origami" = ["configs/*.yml"]
+
