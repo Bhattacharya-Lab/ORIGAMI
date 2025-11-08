@@ -54,8 +54,10 @@ Example, score the H1245TS028_4.pdb complex (in ORIGAMI/example)
 ```bash
 $ conda activate origami
 (origami) $ origami-score ORIGAMI/example/H1245TS028_4.pdb
+(origami) $ origami-score /home/grads/xinyu0110/ORIGAMI/example/H1245TS028_4.pdb
+Predicted iLDDT for protein complex H1245TS028_4.pdb is: 0.752040
 ```
-
+From the output above you can see that the predicted iLDDT for the H1245TS028_4 complex is 0.752040
 
 ## Citation
 If you use ORIGAMI in your research, please cite:
@@ -63,30 +65,7 @@ If you use ORIGAMI in your research, please cite:
 
 ```
 
-## License
-```
-MIT License
 
-Copyright (c) 2025 ORIGAMI Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
 
 ## Contact
 For questions or collaboration requests, reach out to the maintainers:
