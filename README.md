@@ -13,20 +13,19 @@
    git clone https://github.com/Bhattacharya-Lab/ORIGAMI.git
    cd ORIGAMI
    ```
-   Replace `<your-user>` with the GitHub organisation or username that will host ORIGAMI.
-
+  
 2. **Set up the environment**
    ```bash
    conda env create -f origami_environment.yml
    conda activate origami
    ```
-   The YAML ships with CUDA-enabled builds; feel free to slim it down for CPU-only deployments.
+   
 
 3. **Install PyRosetta (optional, for SASA)**
    ```bash
    pip install pyrosetta-2024
    ```
-   PyRosetta requires an academic licence. See the troubleshooting section for alternatives if it is unavailable.
+  
 
 4. **Install the command-line tool**
    ```bash
