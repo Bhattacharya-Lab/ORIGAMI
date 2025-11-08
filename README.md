@@ -7,7 +7,7 @@
 
 ## Installation
 
-### With Anaconda
+The project requires several ML-specific libraries, it's easier to setup with Anaconda:
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Bhattacharya-Lab/ORIGAMI.git
