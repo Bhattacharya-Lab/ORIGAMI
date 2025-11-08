@@ -28,6 +28,7 @@ The project requires several ML-specific libraries, it's easier to setup with An
 
 
 ## Usage
+We provide a command-line interface for ORIGAMI that can easily be used to score protein-protein complexes. The command-line interface can be used as follows:
 
 ### Feature extraction
 ```bash
