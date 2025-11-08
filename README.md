@@ -10,12 +10,12 @@
 ### With Anaconda
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/<your-user>/ORIGAMI.git
+   git clone https://github.com/Bhattacharya-Lab/ORIGAMI.git
    cd ORIGAMI
    ```
    Replace `<your-user>` with the GitHub organisation or username that will host ORIGAMI.
 
-2. **Create and activate the environment**
+2. **Set up the environment**
    ```bash
    conda env create -f origami_environment.yml
    conda activate origami
@@ -34,11 +34,7 @@
    ```
    Editable mode exposes the `origami-preprocess` entry point and keeps local edits live.
 
-5. **Verify the environment**
-   ```bash
-   pytest tests/
-   ```
-   Smoke tests assert core modules import correctly. PyRosetta-dependent checks skip automatically when the package is missing.
+
 
 ## Usage
 
