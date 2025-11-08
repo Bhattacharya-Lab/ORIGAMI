@@ -19,20 +19,12 @@
    conda env create -f origami_environment.yml
    conda activate origami
    ```
-   
 
-3. **Install PyRosetta (optional, for SASA)**
-   ```bash
-   pip install pyrosetta-2024
-   ```
-  
-
-4. **Install the command-line tool**
+3. **Install**
    ```bash
    pip install -e .
    ```
-   Editable mode exposes the `origami-preprocess` entry point and keeps local edits live.
-
+  
 
 
 ## Usage
