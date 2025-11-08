@@ -1,30 +1,9 @@
-# ORIGAMI: Protein Interface Quality Assessment
+# ORIGAMI: Orientation-Aware Graph Neural Network for Assessing Multimeric Interfaces of Protein Complex Structures
 
-> Graph neural network framework for ranking protein complex decoys with secondary-structure and solvent-exposure features.
 
-## Table of Contents
-- [Overview](#overview)
-- [Highlights](#highlights)
-- [Installation](#installation)
-- [Command-Line Workflow](#command-line-workflow)
-- [Pretrained Models](#pretrained-models)
-- [Training](#training)
-- [Dataset Preparation](#dataset-preparation)
-- [Testing & QA](#testing--qa)
-- [Project Structure](#project-structure)
-- [Troubleshooting](#troubleshooting)
-- [Citation](#citation)
-- [License](#license)
-- [Contact](#contact)
 
-## Overview
-ORIGAMI scores protein complex models by combining residue-level features (DSSP secondary structure, PyRosetta SASA, geometric descriptors) with a scalar-vector GNN architecture. The framework supports large-scale preprocessing, distributed training, and evaluation on curated CASP15/16 benchmark sets.
 
-## Highlights
-- **Rich features**: Secondary structure, per-residue SASA, dihedrals, and chain-aware embeddings.
-- **Interface-aware GNN**: Scalar/vector representations with attention over residue interactions.
-- **Pretrained checkpoints**: Ready for plug-and-play evaluation or fine-tuning.
-- **Extensible pipeline**: CLI for feature extraction, modular training configs, and dataset caching.
+
 
 ## Installation
 
@@ -61,7 +40,7 @@ ORIGAMI scores protein complex models by combining residue-level features (DSSP 
    ```
    Smoke tests assert core modules import correctly. PyRosetta-dependent checks skip automatically when the package is missing.
 
-## Command-Line Workflow
+## Usage
 
 ### Feature extraction
 ```bash
