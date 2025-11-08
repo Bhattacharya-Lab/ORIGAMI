@@ -71,12 +71,15 @@ def _normalize(tensor, dim=-1):
         torch.div(tensor, torch.norm(tensor, dim=dim, keepdim=True)))
 
 
-def _process_complex_pdb(pdb_file, json_file):
+def _process_complex_pdb(pdb_file, json_file=None, quality_score=None):
     
-    # Read quality score from JSON
-    with open(json_file, 'r') as f:
-        data_json = json.load(f)
-        quality_score = data_json['ilddt']
+    # Read quality score from JSON if provided, otherwise fall back to default
+    if json_file is not None:
+        with open(json_file, 'r') as f:
+            data_json = json.load(f)
+            quality_score = data_json.get('ilddt', 0.0)
+    if quality_score is None:
+        quality_score = 0.0
         
     # Load structure with Bio.PDB
     parser = PDB.PDBParser(QUIET=True)
