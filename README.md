@@ -59,12 +59,12 @@ Predicted iLDDT for protein complex H1245TS028_4.pdb is: 0.752040
 ```
 From the output above you can see that the predicted iLDDT for the H1245TS028_4 complex is 0.752040
 
-## Citation
+<!--## Citation
 If you use ORIGAMI in your research, please cite:
 ```
 
 ```
-
+-->
 
 
 ## Contact
