@@ -7,6 +7,7 @@ by Xinyu Wang and Debswapna Bhattacharya
 
 ![alt text](ORIGAMI.png)
 
+Codebase for our (ORIentation-aware Gnn for Assessing Multimeric Interfaces).
 
 ## Installation
 
