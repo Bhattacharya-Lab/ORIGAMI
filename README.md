@@ -7,7 +7,7 @@ by Xinyu Wang and Debswapna Bhattacharya
 
 ![alt text](ORIGAMI.png)
 
-Codebase for our (ORIentation-aware Gnn for Assessing Multimeric Interfaces).
+Codebase for our (<ins>ORI</ins>entation-aware <ins>G</ins>NN for <ins>A</ins>ssessing <ins>M</ins>ultimeric <ins>I</ins>nterfaces).
 
 ## Installation
 
