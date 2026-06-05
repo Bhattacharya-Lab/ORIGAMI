@@ -7,7 +7,7 @@ by Xinyu Wang and Debswapna Bhattacharya
 
 ![alt text](ORIGAMI.png)
 
-Codebase for our (<ins>ORI</ins>entation-aware <ins>G</ins>NN for <ins>A</ins>ssessing <ins>M</ins>ultimeric <ins>I</ins>nterfaces).
+Codebase for our <ins>ORI</ins>entation-aware <ins>G</ins>NN for <ins>A</ins>ssessing <ins>M</ins>ultimeric <ins>I</ins>nterfaces (ORIGAMI).
 
 ## Installation
 
