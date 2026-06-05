@@ -1,8 +1,11 @@
-# ORIGAMI
+# ORIGAMI: Orientation-Aware Graph Neural Network for Assessing Multimeric Interfaces of Protein Complex Structures
+
+by Xinyu Wang and Debswapna Bhattacharya
+
+[[bioRxiv](https://www.biorxiv.org/content/10.64898/2026.05.31.729128v1)] [[pdf](https://www.biorxiv.org/content/10.64898/2026.05.31.729128v1.full.pdf)]
 
 
-Orientation-Aware Graph Neural Network for Assessing Multimeric Interfaces of Protein Complex Structures
-
+![alt text](ORIGAMI.png)
 
 
 ## Installation
