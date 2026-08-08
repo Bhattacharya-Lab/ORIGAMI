@@ -4,12 +4,11 @@ by Xinyu Wang and Debswapna Bhattacharyya
 
 published in [Journal of Chemical Information and Modeling](https://doi.org/10.1021/acs.jcim.6c00988)
 
-Codebase for our orientation-aware graph neural network for assessing multimeric interfaces of protein complex structures, ORIGAMI.
+Codebase for our <ins>ORI</ins>entation-aware <ins>G</ins>NN for <ins>A</ins>ssessing <ins>M</ins>ultimeric <ins>I</ins>nterfaces (ORIGAMI) method.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19076236.svg)](https://doi.org/10.5281/zenodo.19076236)
 ![alt text](ORIGAMI.png)
 
-Codebase for our <ins>ORI</ins>entation-aware <ins>G</ins>NN for <ins>A</ins>ssessing <ins>M</ins>ultimeric <ins>I</ins>nterfaces (ORIGAMI).
 
 ## Installation
 
