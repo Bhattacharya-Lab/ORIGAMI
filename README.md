@@ -2,10 +2,11 @@
 
 by Xinyu Wang and Debswapna Bhattacharyya
 
-[JCIM](https://doi.org/10.1021/acs.jcim.6c00988) |
-[bioRxiv](https://www.biorxiv.org/content/10.64898/2026.05.31.729128v1) |
-[Zenodo Dataset](https://zenodo.org/records/19076236)
+published in [Journal of Chemical Information and Modeling](https://doi.org/10.1021/acs.jcim.6c00988)
 
+Codebase for our orientation-aware graph neural network for assessing multimeric interfaces of protein complex structures, ORIGAMI.
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19076236.svg)](https://doi.org/10.5281/zenodo.19076236)
 ![alt text](ORIGAMI.png)
 
 Codebase for our <ins>ORI</ins>entation-aware <ins>G</ins>NN for <ins>A</ins>ssessing <ins>M</ins>ultimeric <ins>I</ins>nterfaces (ORIGAMI).
@@ -29,18 +30,11 @@ The project requires several ML-specific libraries, it's easier to setup with An
    ```bash
    pip install -e .
    ```
-## Data and Code Availability
 
-The source code, trained models, and detailed instructions for using ORIGAMI are available in this repository.
+## Datasets
 
-The training, validation, and test datasets are publicly available on Zenodo:
-
-[https://zenodo.org/records/19076236](https://zenodo.org/records/19076236)
-
-The published ORIGAMI paper is available in the *Journal of Chemical Information and Modeling (JCIM)*:
-
-[https://doi.org/10.1021/acs.jcim.6c00988](https://doi.org/10.1021/acs.jcim.6c00988) 
-
+- The training, validation, and test datasets used in ORIGAMI are publicly available on [Zenodo](https://zenodo.org/records/19076236).
+- Data were curated from the [Protein Data Bank (PDB)](https://www.rcsb.org/).
 
 ## Usage
 We provide a command-line interface for ORIGAMI that can easily be used to score protein-protein complexes. The command-line interface can be used as follows:
