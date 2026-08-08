@@ -34,7 +34,6 @@ The project requires several ML-specific libraries, it's easier to setup with An
 ## Datasets
 
 - The training, validation, and test datasets used in ORIGAMI are publicly available on [Zenodo](https://zenodo.org/records/19076236).
-- Data were curated from the [Protein Data Bank (PDB)](https://www.rcsb.org/).
 
 ## Usage
 We provide a command-line interface for ORIGAMI that can easily be used to score protein-protein complexes. The command-line interface can be used as follows:
