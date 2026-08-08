@@ -29,7 +29,17 @@ The project requires several ML-specific libraries, it's easier to setup with An
    ```bash
    pip install -e .
    ```
-  
+## Data and Code Availability
+
+The source code, trained models, and detailed instructions for using ORIGAMI are available in this repository.
+
+The training, validation, and test datasets are publicly available on Zenodo:
+
+[https://zenodo.org/records/19076236](https://zenodo.org/records/19076236)
+
+The published ORIGAMI paper is available in the *Journal of Chemical Information and Modeling (JCIM)*:
+
+[https://doi.org/10.1021/acs.jcim.6c00988](https://doi.org/10.1021/acs.jcim.6c00988) 
 
 
 ## Usage
