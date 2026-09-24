@@ -22,7 +22,6 @@ dist/
 # Logs and checkpoints
 logs/
 *.log
-pretrained_models/checkpoints/
 
 # Generated data artifacts
 origami_datasets/
@@ -30,7 +29,12 @@ origami_datasets/
 *.npy
 *.npz
 
+# Publish the documented ORIGAMI checkpoint while ignoring other PyTorch artifacts.
+!pretrained_models/checkpoints/
+pretrained_models/checkpoints/*
+!pretrained_models/checkpoints/110.pt
+!pretrained_models/checkpoints/best.pt
+
 # OS-specific
 .DS_Store
 Thumbs.db
-
